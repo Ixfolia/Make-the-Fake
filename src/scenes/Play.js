@@ -15,6 +15,8 @@ class Play extends Phaser.Scene {
 
             const terrainLayer = map.createLayer('Tile Layer 1', tileset, 0, 0);
 
+            const bgLayer = map.createLayer('background', tileset, 0, 0);
+
             
         // MAP -------------------------------------------------------------------
 
@@ -41,6 +43,8 @@ class Play extends Phaser.Scene {
         this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
         this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
         this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
+        this.keyL = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L)
+        this.keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R)
 
         // PLAYER ----------------------------------------------------------------
 
@@ -70,6 +74,10 @@ class Play extends Phaser.Scene {
 
     update(){
 
+        // Restart game
+        if (Phaser.Input.Keyboard.JustDown(this.keyR)){
+            this.scene.start('menuScene');
+        }
         // PLAYER ----------------------------------------------------------------
 
             // Player Properties
@@ -101,6 +109,9 @@ class Play extends Phaser.Scene {
             }
         }
         if (this.keyW.isDown && this.player.body.onFloor()){
+            if (this.faceRight == true) {
+                this.player.anims.play('idle-right')
+            }
             let jumpTimer = this.time.addEvent({
                 delay: 10, // ms
                 callback: () => {
@@ -109,6 +120,19 @@ class Play extends Phaser.Scene {
                 repeat: 10 // Repeat 10 times
             });
         }
+        if (this.keyW.isDown && this.player.body.onFloor()){
+            if (this.faceRight == true) {
+                this.player.anims.play('idle-right')
+            }
+            let jumpTimer = this.time.addEvent({
+                delay: 10, // ms
+                callback: () => {
+                    this.player.setVelocityY(-200); // Small upward velocity
+                },
+                repeat: 10 // Repeat 10 times
+            });
+        }
+
         if (!this.player.body.onFloor()){
             this.player.body.gravity.y += 200; // Increase gravity while in the air
         } 
@@ -118,6 +142,9 @@ class Play extends Phaser.Scene {
 
             // Set Player Velocity
         this.player.body.setVelocity(moveDirection.x, moveDirection.y)
+
+
+            // Player Attack
 
         // PLAYER ----------------------------------------------------------------
 

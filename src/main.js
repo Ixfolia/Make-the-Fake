@@ -11,7 +11,7 @@
 'use strict'
 
 let config = {
-    // parent: "Phaser-Game",
+    parent: "Phaser-Game",
     type: Phaser.AUTO,
     render: {
         pixelArt: true,
@@ -19,7 +19,7 @@ let config = {
     physics: {
         default: "arcade",
         arcade: {
-            debug: true
+            debug: false,
         }
     },
     width: 1366,
@@ -30,7 +30,7 @@ let config = {
         mode: Phaser.Scale.FIT,
     },
 
-    scene: [ Load, Play ],
+    scene: [ Load, Play, Menu ],
 }
 
 let game = new Phaser.Game(config);
