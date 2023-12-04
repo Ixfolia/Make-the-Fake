@@ -10,8 +10,8 @@
 
 'use strict'
 
-const config = {
-    parent: "Phaser-Game",
+let config = {
+    // parent: "Phaser-Game",
     type: Phaser.AUTO,
     render: {
         pixelArt: true,

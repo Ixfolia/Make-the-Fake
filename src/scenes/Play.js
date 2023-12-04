@@ -23,27 +23,24 @@ class Play extends Phaser.Scene {
 
             // Player Properties
         const playerSpawn = map.findObject('Object Layer 1', obj => obj.name === "playerSpawn")
+        this.faceRight = true;
 
             // Add Player
         
-        this.player = this.physics.add.sprite(playerSpawn.x, playerSpawn.y, 'player', "Hero 0.aseprite").setScale(1);
+        this.player = this.physics.add.sprite(playerSpawn.x, playerSpawn.y, 'player').setScale(1);
         // this.player = this.physics.add.sprite(0, game.config.height / 2, 'player', "Hero 0.aseprite").setScale(1);
         this.player.body.setSize(this.player.width / 2, 12);
         this.player.setCollideWorldBounds(true);
 
-            // Player Animation
-        this.anims.create({
-            key: 'walk',
-            frames: this.anims.generateFrameNumbers('player', {
-                start: 0, 
-                end: 0
-            }),
-            frameRate: 10,
-        
-        });
-        
+            // Player Animations
+
             // Player Physics
         this.player.setGravityY(400); // Gravity
+
+            // Player Controls
+        this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
+        this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
+        this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
 
         // PLAYER ----------------------------------------------------------------
 
@@ -53,7 +50,7 @@ class Play extends Phaser.Scene {
 
         this.cameras.main.setBounds(0, 0, 1000, 1000)
         this.cameras.main.startFollow(this.player);
-        this.cameras.main.setZoom(4);
+        this.cameras.main.setZoom(6);
 
         // CAMERA ----------------------------------------------------------------
 
@@ -76,20 +73,34 @@ class Play extends Phaser.Scene {
         // PLAYER ----------------------------------------------------------------
 
             // Player Properties
-        let moveDirection = new Phaser.Math.Vector2(0, 0);    
+        let moveDirection = new Phaser.Math.Vector2(0, 0);  
 
             // Player Movement
 
-        if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D).isDown){
+        if (this.keyD.isDown){
             moveDirection.x += 100;
+            this.player.anims.play('walk-right', true)
+            this.faceRight = true;
         }
-        else if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A).isDown){
+        else if (this.keyA.isDown){
             moveDirection.x -= 100;
+            this.player.anims.play('walk-left', true)
+            this.faceRight = false;
         }
         else {
             moveDirection.x = 0;
+            this.player.anims.play('idle-right')
+            if (this.player.body.onFloor()) { // check if the player is on the ground
+                // Check last direction to play idle animation
+                if (this.faceRight == true) {
+                    this.player.anims.play('idle-right')
+                }
+                else{
+                    this.player.anims.play('idle-left')
+                }
+            }
         }
-        if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W).isDown && this.player.body.onFloor()){
+        if (this.keyW.isDown && this.player.body.onFloor()){
             let jumpTimer = this.time.addEvent({
                 delay: 10, // ms
                 callback: () => {
