@@ -70,6 +70,12 @@ class Play extends Phaser.Scene {
 
         // COLLISIONS ------------------------------------------------------------
 
+        // AUDIO -----------------------------------------------------------------
+
+        this.jumpSound = this.sound.add('jump');
+
+        // AUDIO -----------------------------------------------------------------
+
     }
 
     update(){
@@ -109,18 +115,7 @@ class Play extends Phaser.Scene {
             }
         }
         if (this.keyW.isDown && this.player.body.onFloor()){
-            if (this.faceRight == true) {
-                this.player.anims.play('idle-right')
-            }
-            let jumpTimer = this.time.addEvent({
-                delay: 10, // ms
-                callback: () => {
-                    this.player.setVelocityY(-200); // Small upward velocity
-                },
-                repeat: 10 // Repeat 10 times
-            });
-        }
-        if (this.keyW.isDown && this.player.body.onFloor()){
+            this.jumpSound.play();
             if (this.faceRight == true) {
                 this.player.anims.play('idle-right')
             }

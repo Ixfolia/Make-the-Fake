@@ -14,6 +14,9 @@ class Load extends Phaser.Scene {
         // load tilemap assets
         this.load.image('tilesetImage','Tilemap.png')
         this.load.tilemapTiledJSON('tilemapJSON', 'map.json')
+
+        // load sfx
+        this.load.audio('jump', 'sfx/jump.wav');
     }
 
     create() {
