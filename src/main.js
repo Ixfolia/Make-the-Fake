@@ -1,3 +1,13 @@
+/** TO DO LIST
+ * Gravity system for jumping
+ * Add platforms
+ * Walk animation
+ * Slash animation
+ * Cameras
+ * 
+ * 
+*/
+
 'use strict'
 
 const config = {

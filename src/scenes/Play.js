@@ -4,12 +4,30 @@ class Play extends Phaser.Scene {
     }
 
     create(){
+
+        // MAP -------------------------------------------------------------------
+
+            // Tilemap
+            
+            const  map = this.make.tilemap({key: 'tilemapJSON', tileWidth: 120, tileHeight: 30});
+            // const map = this.add.tilemap('tilemapJSON');
+            const tileset = map.addTilesetImage('tileset', 'tilesetImage');
+
+            const terrainLayer = map.createLayer('Tile Layer 1', tileset, 0, 0);
+
+            
+        // MAP -------------------------------------------------------------------
+
+
         // PLAYER ----------------------------------------------------------------
 
-
+            // Player Properties
+        const playerSpawn = map.findObject('Object Layer 1', obj => obj.name === "playerSpawn")
 
             // Add Player
-        this.player = this.physics.add.sprite(50, 50, 'player', "Hero 0.aseprite").setScale(8);
+        
+        this.player = this.physics.add.sprite(playerSpawn.x, playerSpawn.y, 'player', "Hero 0.aseprite").setScale(1);
+        // this.player = this.physics.add.sprite(0, game.config.height / 2, 'player', "Hero 0.aseprite").setScale(1);
         this.player.body.setSize(this.player.width / 2, 12);
         this.player.setCollideWorldBounds(true);
 
@@ -23,9 +41,33 @@ class Play extends Phaser.Scene {
             frameRate: 10,
         
         });
-
+        
+            // Player Physics
+        this.player.setGravityY(400); // Gravity
 
         // PLAYER ----------------------------------------------------------------
+
+
+
+        // CAMERA ----------------------------------------------------------------
+
+        this.cameras.main.setBounds(0, 0, 1000, 1000)
+        this.cameras.main.startFollow(this.player);
+        this.cameras.main.setZoom(4);
+
+        // CAMERA ----------------------------------------------------------------
+
+
+
+        // COLLISIONS ------------------------------------------------------------
+
+        terrainLayer.setCollisionByProperty({
+            collides: true
+        });
+        this.physics.add.collider(this.player, terrainLayer)
+        
+
+        // COLLISIONS ------------------------------------------------------------
 
     }
 
@@ -47,8 +89,20 @@ class Play extends Phaser.Scene {
         else {
             moveDirection.x = 0;
         }
-        if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W).isDown){
-            moveDirection.y -= 100;
+        if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W).isDown && this.player.body.onFloor()){
+            let jumpTimer = this.time.addEvent({
+                delay: 10, // ms
+                callback: () => {
+                    this.player.setVelocityY(-200); // Small upward velocity
+                },
+                repeat: 10 // Repeat 10 times
+            });
+        }
+        if (!this.player.body.onFloor()){
+            this.player.body.gravity.y += 200; // Increase gravity while in the air
+        } 
+        else {
+            this.player.body.setGravityY(800); // Reset gravity when the player touches the ground
         }
 
             // Set Player Velocity
