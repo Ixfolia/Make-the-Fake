@@ -37,7 +37,7 @@ class Play extends Phaser.Scene {
             // Player Animations
 
             // Player Physics
-        this.player.setGravityY(400); // Gravity
+        this.player.setGravityY(300); // Gravity
 
             // Player Controls
         this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
@@ -45,6 +45,7 @@ class Play extends Phaser.Scene {
         this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
         this.keyL = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L)
         this.keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R)
+        this.isJumping = false;
 
         // PLAYER ----------------------------------------------------------------
 
@@ -52,7 +53,7 @@ class Play extends Phaser.Scene {
 
         // CAMERA ----------------------------------------------------------------
 
-        this.cameras.main.setBounds(0, 0, 1000, 1000)
+        this.cameras.main.setBounds(0, 0, 1366, 768)
         this.cameras.main.startFollow(this.player);
         this.cameras.main.setZoom(6);
 
@@ -70,6 +71,8 @@ class Play extends Phaser.Scene {
 
         // COLLISIONS ------------------------------------------------------------
 
+
+
         // AUDIO -----------------------------------------------------------------
 
         this.jumpSound = this.sound.add('jump');
@@ -79,6 +82,7 @@ class Play extends Phaser.Scene {
     }
 
     update(){
+        const speed = 50;
 
         // Restart game
         if (Phaser.Input.Keyboard.JustDown(this.keyR)){
@@ -92,51 +96,54 @@ class Play extends Phaser.Scene {
             // Player Movement
 
         if (this.keyD.isDown){
-            moveDirection.x += 100;
+            this.player.body.setVelocityX(80);
             this.player.anims.play('walk-right', true)
             this.faceRight = true;
         }
         else if (this.keyA.isDown){
-            moveDirection.x -= 100;
+            this.player.body.setVelocityX(-80);
             this.player.anims.play('walk-left', true)
             this.faceRight = false;
         }
         else {
-            moveDirection.x = 0;
+            this.player.body.setVelocityX(0);
             this.player.anims.play('idle-right')
             if (this.player.body.onFloor()) { // check if the player is on the ground
                 // Check last direction to play idle animation
                 if (this.faceRight == true) {
-                    this.player.anims.play('idle-right')
+                    this.player.anims.play('idle-right', true)
                 }
                 else{
-                    this.player.anims.play('idle-left')
+                    this.player.anims.play('idle-left', true)
                 }
             }
         }
-        if (this.keyW.isDown && this.player.body.onFloor()){
+        if (Phaser.Input.Keyboard.JustDown(this.keyW) && this.player.body.onFloor()){
             this.jumpSound.play();
-            if (this.faceRight == true) {
-                this.player.anims.play('idle-right')
-            }
-            let jumpTimer = this.time.addEvent({
-                delay: 10, // ms
-                callback: () => {
-                    this.player.setVelocityY(-200); // Small upward velocity
-                },
-                repeat: 10 // Repeat 10 times
-            });
+            this.player.body.setVelocityY(-200);
+            // moveDirection.y = -500;
+            this.isJumping = true;
         }
 
+        // if (this.isJumping) {
+        //     moveDirection.y -= 50; // Increment the upward velocity by a small amount
+        //     // if (moveDirection.y == -300) { // Stop incrementing when the desired jump height is reached
+        //     //     this.isJumping = false;
+        //     // }
+        // }
+        // else {
+        //     moveDirection.y = 0; // Reset the upward velocity
+        // }
+
         if (!this.player.body.onFloor()){
-            this.player.body.gravity.y += 200; // Increase gravity while in the air
+            this.player.body.setGravityY(800) // Increase gravity while in the air
         } 
         else {
-            this.player.body.setGravityY(800); // Reset gravity when the player touches the ground
+            this.player.body.setGravityY(300); // Reset gravity when the player touches the ground
         }
 
             // Set Player Velocity
-        this.player.body.setVelocity(moveDirection.x, moveDirection.y)
+        // this.player.body.setVelocity(moveDirection.x)
 
 
             // Player Attack

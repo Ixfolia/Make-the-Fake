@@ -1,9 +1,16 @@
 /** TO DO LIST
  * Gravity system for jumping
+ * * It currently looks like the player is hitting the roof of some sort, fix physics
+ * Switch jump from is.Down to just.Down
  * Add platforms
- * Walk animation
- * Slash animation
- * Cameras
+ * Walk animation X
+ * attack animation
+ * * Maybe try using a State Machine to handle animations
+ * Cameras X
+ * Coins
+ * Boss Fight
+ * Mini enemies
+ * * Try to either focus on coins and platforming or a boss fight.
  * 
  * 
 */
