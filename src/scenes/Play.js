@@ -9,13 +9,11 @@ class Play extends Phaser.Scene {
 
             // Tilemap
             
-            const  map = this.make.tilemap({key: 'tilemapJSON', tileWidth: 120, tileHeight: 30});
-            // const map = this.add.tilemap('tilemapJSON');
-            const tileset = map.addTilesetImage('tileset', 'tilesetImage');
+        const  map = this.make.tilemap({key: 'tilemapJSON', tileWidth: 120, tileHeight: 30});
+        const tileset = map.addTilesetImage('tileset', 'tilesetImage');
 
-            const terrainLayer = map.createLayer('Tile Layer 1', tileset, 0, 0);
-
-            const bgLayer = map.createLayer('background', tileset, 0, 0);
+        const terrainLayer = map.createLayer('Tile Layer 1', tileset, 0, 0);
+        const bgLayer = map.createLayer('background', tileset, 0, 0);
 
             
         // MAP -------------------------------------------------------------------
@@ -36,6 +34,7 @@ class Play extends Phaser.Scene {
 
             // Player Animations
 
+
             // Player Physics
         this.player.setGravityY(300); // Gravity
 
@@ -45,7 +44,7 @@ class Play extends Phaser.Scene {
         this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
         this.keyL = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L)
         this.keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R)
-        this.isJumping = false;
+
 
         // PLAYER ----------------------------------------------------------------
 
@@ -82,12 +81,13 @@ class Play extends Phaser.Scene {
     }
 
     update(){
-        const speed = 50;
+        const speed = 80;
 
         // Restart game
         if (Phaser.Input.Keyboard.JustDown(this.keyR)){
             this.scene.start('menuScene');
         }
+
         // PLAYER ----------------------------------------------------------------
 
             // Player Properties
@@ -96,12 +96,12 @@ class Play extends Phaser.Scene {
             // Player Movement
 
         if (this.keyD.isDown){
-            this.player.body.setVelocityX(80);
+            this.player.body.setVelocityX(speed);
             this.player.anims.play('walk-right', true)
             this.faceRight = true;
         }
         else if (this.keyA.isDown){
-            this.player.body.setVelocityX(-80);
+            this.player.body.setVelocityX(-speed);
             this.player.anims.play('walk-left', true)
             this.faceRight = false;
         }
@@ -122,18 +122,8 @@ class Play extends Phaser.Scene {
             this.jumpSound.play();
             this.player.body.setVelocityY(-200);
             // moveDirection.y = -500;
-            this.isJumping = true;
+            // this.isJumping = true;
         }
-
-        // if (this.isJumping) {
-        //     moveDirection.y -= 50; // Increment the upward velocity by a small amount
-        //     // if (moveDirection.y == -300) { // Stop incrementing when the desired jump height is reached
-        //     //     this.isJumping = false;
-        //     // }
-        // }
-        // else {
-        //     moveDirection.y = 0; // Reset the upward velocity
-        // }
 
         if (!this.player.body.onFloor()){
             this.player.body.setGravityY(800) // Increase gravity while in the air
@@ -142,8 +132,6 @@ class Play extends Phaser.Scene {
             this.player.body.setGravityY(300); // Reset gravity when the player touches the ground
         }
 
-            // Set Player Velocity
-        // this.player.body.setVelocity(moveDirection.x)
 
 
             // Player Attack
