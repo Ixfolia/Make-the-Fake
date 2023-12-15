@@ -49,7 +49,8 @@ class Play extends Phaser.Scene {
             // Player cheat mode controls
         this.cursors = this.input.keyboard.createCursorKeys();
         this.gravityOn = true;
-        this.keyU = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.U); // disables gravity for the player
+        this.keyU = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.U);
+        this.godMode = false;
 
 
         // PLAYER ----------------------------------------------------------------
@@ -247,6 +248,11 @@ class Play extends Phaser.Scene {
             this.player.y += 3;
         }
 
+                // God mode
+        if (Phaser.Input.Keyboard.JustDown(this.keyU)) {
+            this.godMode = !this.godMode;
+        }
+
         // PLAYER ----------------------------------------------------------------
 
         // ENEMY -----------------------------------------------------------------
@@ -293,13 +299,20 @@ class Play extends Phaser.Scene {
         let cannonBall = this.physics.add.sprite(1352, 438, 'cannon ball').setScale(0.8);
         cannonBall.body.setVelocityX(20);
         cannonBall.body.setCircle(cannonBall.width / 2, 1);
+        cannonBall.body.setImmovable(true);
         this.physics.add.collider(cannonBall, this.player, () => {
-            this.scene.start('deathScene');
+            if (!this.godMode) {
+                // Code to handle player death
+                this.scene.start('deathScene');
+            }
         });
     }
 
     playerDeath(){
-        this.scene.start('deathScene');
+        if (!this.godMode) {
+            // Code to handle player death
+            this.scene.start('deathScene');
+        }
     }
 
 }

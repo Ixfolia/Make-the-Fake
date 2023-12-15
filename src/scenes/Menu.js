@@ -9,7 +9,7 @@ class Menu extends Phaser.Scene{
         title.setFontSize(40);
         // Instructions
         let instructions = this.add.text(game.config.width / 2, game.config.height / 2 + 100, 
-        'Press O to start\nWARNING: You will die in one hit. Have fun!\nGet the red crystal and escape through the portal!\nPress M for credits\nPress N for controls'
+        'Press O to start\nWARNING: You will die in one hit. Have fun!\nGet the red crystal and escape through the portal!\n\nPress M for credits\nPress N for controls'
         ).setOrigin(0.5);
         instructions.setFontSize(32);
     

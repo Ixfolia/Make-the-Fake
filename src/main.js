@@ -1,4 +1,8 @@
 /**
+ * Brady Lin
+ * CMPM 120
+ * Make the Fake Game
+ * 
     CLASS GRADING
 
 === INFRASTRUCTURE ==
@@ -32,7 +36,7 @@
 === POLISH & STYLE ===
 
 +5 Your game has that extra bit of polish, creativity, technical prowess, and/or originality that helps it stand out from other games. We use this criteria as a grade "tilt" to reward games that we really enjoyed, that are bold and inventive, that adapt their target media thoughtfully, that demonstrate strong technical skills, and/or went beyond the stated objectives of the assignment. Feel free to add a comment to your main.js/Canvas submission if you wish to point out any features that we might miss.
- * 
+
 */
 
 'use strict'
