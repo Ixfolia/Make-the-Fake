@@ -7,9 +7,9 @@ class Lose extends Phaser.Scene{
 
         // Instructions
         let instructions = this.add.text(game.config.width / 2, game.config.height / 2 + 100, 
-        'You left without the crystal. You lose\nPress R to restart'
+        'You left without the crystal. You lose\nPress R to restart', { font: '32px "Comic Sans MS"', fill: '#3d7da8'}
         ).setOrigin(0.5);
-        instructions.setFontSize(32);
+        // instructions.setFontSize(32);
     
         // Start the game
         this.keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);

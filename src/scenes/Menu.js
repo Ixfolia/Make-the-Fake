@@ -5,13 +5,14 @@ class Menu extends Phaser.Scene{
 
     create(){
         // Title Screen
-        let title = this.add.text(game.config.width / 2, game.config.height / 2 - 100, 'Tale of Zelmore').setOrigin(0.9);
-        title.setFontSize(40);
+        let title = this.add.text(game.config.width / 2, game.config.height / 2 - 100, 'Tale of Zelmore', { font: '40px "Comic Sans MS"', fill: '#3d7da8'}).setOrigin(0.9);
+        // title.setFontSize(40);
         // Instructions
         let instructions = this.add.text(game.config.width / 2, game.config.height / 2 + 100, 
-        'Press O to start\nWARNING: You will die in one hit. Have fun!\nGet the red crystal and escape through the portal!\n\nPress M for credits\nPress N for controls'
+        'Press O to start\nWARNING: You will die in one hit. Have fun!\nGet the red crystal and escape through the portal!\n\nPress M for credits\nPress N for controls',
+        { font: '32px "Comic Sans MS"', fill: '#3d7da8'}
         ).setOrigin(0.5);
-        instructions.setFontSize(32);
+        // instructions.setFontSize(32);
     
         // Keys
         this.keyO = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O);
