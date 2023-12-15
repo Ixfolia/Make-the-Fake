@@ -24,6 +24,7 @@ class Play extends Phaser.Scene {
             // Player Properties
         const playerSpawn = map.findObject('Object Layer 1', obj => obj.name === "playerSpawn")
         this.faceRight = true;
+        this.crystalGrabbed = false;
 
             // Add Player
         
@@ -45,6 +46,11 @@ class Play extends Phaser.Scene {
         this.keyL = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L)
         this.keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R)
 
+            // Player cheat mode controls
+        this.cursors = this.input.keyboard.createCursorKeys();
+        this.gravityOn = true;
+        this.keyU = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.U); // disables gravity for the player
+
 
         // PLAYER ----------------------------------------------------------------
 
@@ -52,7 +58,7 @@ class Play extends Phaser.Scene {
 
         // CAMERA ----------------------------------------------------------------
 
-        this.cameras.main.setBounds(0, 0, 1366, 768)
+        this.cameras.main.setBounds(0, 0, 1980, 720)
         this.cameras.main.startFollow(this.player);
         this.cameras.main.setZoom(6);
 
@@ -60,7 +66,7 @@ class Play extends Phaser.Scene {
 
 
 
-        // COLLISIONS ------------------------------------------------------------
+        // PLAYER COLLISIONS -----------------------------------------------------
 
         terrainLayer.setCollisionByProperty({
             collides: true
@@ -68,7 +74,7 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.player, terrainLayer)
         
 
-        // COLLISIONS ------------------------------------------------------------
+        // PLAYER COLLISIONS -----------------------------------------------------
 
 
 
@@ -82,16 +88,19 @@ class Play extends Phaser.Scene {
 
             // Spawn enemies
         this.enemies = [
-            new Enemy(this, 57, 134, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),,
-            new Enemy(this, 178, 338, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),,
-            new Enemy(this, 425, 458, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),,
-            new Enemy(this, 465, 455, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),,
-            new Enemy(this, 504, 457, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),,
-            new Enemy(this, 737, 231, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),,
-            new Enemy(this, 892, 375, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),,
-            new Enemy(this, 737, 231, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),,
-            new Enemy(this, 799, 230, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),,
-            new Enemy(this, 869, 231, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),,
+                // Cave Enemies
+            new Enemy(this, 178, 338, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),
+            new Enemy(this, 425, 458, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),
+            new Enemy(this, 465, 455, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),
+            new Enemy(this, 504, 457, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),
+            new Enemy(this, 737, 231, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),
+            new Enemy(this, 892, 375, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),
+            new Enemy(this, 737, 231, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),
+            new Enemy(this, 799, 230, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),
+            new Enemy(this, 869, 231, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),
+                // Castle Enemies
+            new Enemy(this, 1472, 212, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),
+            new Enemy(this, 1537, 212, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),
         ]
 
             // Enemy hitboxes
@@ -111,9 +120,64 @@ class Play extends Phaser.Scene {
             this.physics.add.collider(enemy, terrainLayer);
         });
 
-
+            // Enemy Damage
+        this.enemies.forEach(enemy => {
+            this.physics.add.overlap(this.player, enemy, this.playerDeath, null, this);
+        });
 
         // ENEMY -----------------------------------------------------------------
+
+
+        // BOSS ------------------------------------------------------------------
+
+            // Spawn boss
+        this.boss = this.physics.add.sprite(1575, 275, 'crocodile').setScale(1.5);
+
+            // Projectiles
+        this.time.addEvent({
+            delay: 5500, // Time in milliseconds before the event fires. 5000ms = 5s
+            callback: this.spawnCannonBall, // Function to call when the event fires
+            callbackScope: this, // Context in which to call the function
+            loop: true // Whether the event repeats after it fires
+        });
+
+        // BOSS ------------------------------------------------------------------
+
+
+        // OBJECTIVES ------------------------------------------------------------
+
+            // Spawn crystal
+        // this.crystal = this.physics.add.sprite(53, 138, 'crystal').setScale(0.9);
+        this.crystal = this.physics.add.sprite(1584, 209, 'crystal').setScale(0.9);
+        this.crystal.body.setImmovable(true);
+        this.crystal.body.setSize(this.crystal.width/2);
+
+            // Crystal Collision
+        this.physics.add.collider(this.player, this.crystal, () => {
+            if (this.crystalGrabbed == false){
+                this.crystalGrabbed = true;
+                this.crystal.destroy();
+            }
+        });
+
+            // Spawn portal
+        // this.portal = this.physics.add.sprite(136, 138, 'portal').setScale(0.9);
+        this.portal = this.physics.add.sprite(1214, 451, 'portal').setScale(0.9);
+
+            // Portal Collision
+        this.physics.add.collider(this.player, this.portal, () => {
+            if (this.crystalGrabbed == true){
+                this.scene.start('winScene');
+            }
+            else{
+                this.scene.start('loseScene');
+            }
+        });
+        this.portal.body.setImmovable(true);
+
+
+        // OBJECTIVES ------------------------------------------------------------
+
 
     }
 
@@ -158,8 +222,6 @@ class Play extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(this.keyW) && this.player.body.onFloor()){
             this.jumpSound.play();
             this.player.body.setVelocityY(-200);
-            // moveDirection.y = -500;
-            // this.isJumping = true;
         }
 
         if (!this.player.body.onFloor()){
@@ -169,9 +231,19 @@ class Play extends Phaser.Scene {
             this.player.body.setGravityY(300); // Reset gravity when the player touches the ground
         }
 
-
-
-            // Player Attack
+            // Cheat mode keys [super jump and speed]
+        if (this.cursors.left.isDown) {
+            this.player.x -= 1; 
+        }
+        if (this.cursors.right.isDown) {
+            this.player.x += 1; 
+        }
+        if (this.cursors.up.isDown) {
+            this.player.y -= 2; 
+        }
+        if (this.cursors.down.isDown) {
+            this.player.y += 3;
+        }
 
         // PLAYER ----------------------------------------------------------------
 
@@ -209,6 +281,23 @@ class Play extends Phaser.Scene {
         // ENEMY -----------------------------------------------------------------
 
 
+
+
+    }
+
+
+    spawnCannonBall(){
+        // let cannonBall = this.physics.add.sprite(0, 133, 'cannon ball').setScale(0.8);
+        let cannonBall = this.physics.add.sprite(1352, 438, 'cannon ball').setScale(0.8);
+        cannonBall.body.setVelocityX(20);
+        cannonBall.body.setCircle(cannonBall.width / 2, 1);
+        this.physics.add.collider(cannonBall, this.player, () => {
+            this.scene.start('deathScene');
+        });
+    }
+
+    playerDeath(){
+        this.scene.start('deathScene');
     }
 
 }

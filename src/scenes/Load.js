@@ -11,6 +11,12 @@ class Load extends Phaser.Scene {
             frameHeight: 128,
         });
         this.load.atlas('enemy', 'Slime.png', 'Slime.json');
+        this.load.atlas('crystal', 'crystal.png', 'crystal.json');
+        this.load.image('lightning', 'lightning.png');
+        this.load.image('locked door', 'locked door.png');
+        this.load.image('crocodile', 'crocodile.png');
+        this.load.image('cannon ball', 'cannon ball.png');
+        this.load.image('portal', 'portal.png');
         
     
 
@@ -27,6 +33,7 @@ class Load extends Phaser.Scene {
     create() {
         this.createHeroAnims();
         this.createEnemyAnims();
+        this.createCrystalAnims();
 
         // start playScene after loading everything
         this.scene.start('menuScene');
@@ -110,7 +117,7 @@ class Load extends Phaser.Scene {
     }
 
     createEnemyAnims(){
-        
+
         // Idle animation
         this.anims.create({
             key: 'enemy-idle',
@@ -147,6 +154,21 @@ class Load extends Phaser.Scene {
         });
 
 
+    }
+
+    createCrystalAnims(){
+        // Idle animation
+        this.anims.create({
+            key: 'crystal-idle',
+            frameRate: 10,
+            repeat: 1,
+            frames: this.anims.generateFrameNames('crystal', {
+                start: 0, 
+                end: 3,
+                prefix: 'crystal ',
+                suffix: '.aseprite'
+            })
+        });
     }
     
 

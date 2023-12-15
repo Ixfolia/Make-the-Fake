@@ -1,18 +1,4 @@
-/** TO DO LIST
- * Gravity system for jumping
- * * It currently looks like the player is hitting the roof of some sort, fix physics
- * Switch jump from is.Down to just.Down
- * Add platforms
- * Walk animation X
- * attack animation
- * * Maybe try using a State Machine to handle animations
- * Cameras X
- * Coins
- * Boss Fight (SCRAPPED)
- * Mini enemies
- * * Try to either focus on coins and platforming or a boss fight.
- * 
-
+/**
     CLASS GRADING
 
 === INFRASTRUCTURE ==
@@ -38,6 +24,7 @@
     - Cameras
     - Tilemaps
     - Animations
+    - Text
 +10 Your game has mechanical cohesion, i.e. the mechanics reflect your adaptation's technical goals, the game controls and performs as expected, and the mechanics are well-implemented.
 
 +5 Your project and code are well-structured and organized, including legible comments, appropriate data structures, sensible prefabs, meaningful variable names, logical scene structures, etc. (Nathan's examples are a good baseline.)
@@ -62,15 +49,15 @@ let config = {
             debug: true,
         }
     },
-    width: 1366,
-    height: 768,
+    width: 1980,
+    height: 720,
     zoom: 2,
     
     scale: {
         mode: Phaser.Scale.FIT,
     },
 
-    scene: [ Load, Play, Menu ],
+    scene: [ Load, Play, Menu, Death, Lose, Win, Credits, Controls],
 }
 
 let game = new Phaser.Game(config);
