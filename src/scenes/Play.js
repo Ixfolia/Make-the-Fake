@@ -78,6 +78,43 @@ class Play extends Phaser.Scene {
 
         // AUDIO -----------------------------------------------------------------
 
+        // ENEMY -----------------------------------------------------------------
+
+            // Spawn enemies
+        this.enemies = [
+            new Enemy(this, 57, 134, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),,
+            new Enemy(this, 178, 338, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),,
+            new Enemy(this, 425, 458, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),,
+            new Enemy(this, 465, 455, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),,
+            new Enemy(this, 504, 457, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),,
+            new Enemy(this, 737, 231, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),,
+            new Enemy(this, 892, 375, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),,
+            new Enemy(this, 737, 231, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),,
+            new Enemy(this, 799, 230, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),,
+            new Enemy(this, 869, 231, 'enemy', 0, this.player).setScale(0.8).setData('isMoving', false),,
+        ]
+
+            // Enemy hitboxes
+        this.enemies.forEach(enemy => {
+            enemy.body.setCircle(enemy.width / 2, 1);
+        });
+
+
+            // Enemy Physics
+        this.enemies.forEach(enemy => {
+            enemy.setGravityY(300);
+        });
+
+        
+            // Enemy Collision
+        this.enemies.forEach(enemy => {
+            this.physics.add.collider(enemy, terrainLayer);
+        });
+
+
+
+        // ENEMY -----------------------------------------------------------------
+
     }
 
     update(){
@@ -137,6 +174,40 @@ class Play extends Phaser.Scene {
             // Player Attack
 
         // PLAYER ----------------------------------------------------------------
+
+        // ENEMY -----------------------------------------------------------------
+
+
+            // Enemy Properties
+        this.enemies.forEach(enemy => {
+            if (this.cameras.main.worldView.contains(enemy.x, enemy.y)){
+                    // Enemy Movement
+                var direction = new Phaser.Math.Vector2(this.player.x - enemy.x, this.player.y - enemy.y);
+                direction.normalize();
+
+                var speed = 20;
+                enemy.body.setVelocityX(direction.x * speed);
+                enemy.setData('isMoving', true);
+            }
+            else{
+                enemy.setData('isMoving', false);
+            }
+
+
+        })
+            // Enemy Animations
+        this.enemies.forEach(enemy => {
+            if (enemy.getData('isMoving') == true){
+                enemy.anims.play('enemy-walk', true);
+            }
+            else{
+                enemy.anims.play('enemy-idle', true);
+            }
+        });
+
+
+        // ENEMY -----------------------------------------------------------------
+
 
     }
 

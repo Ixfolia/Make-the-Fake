@@ -10,6 +10,9 @@ class Load extends Phaser.Scene {
             frameWidth: 128,
             frameHeight: 128,
         });
+        this.load.atlas('enemy', 'Slime.png', 'Slime.json');
+        
+    
 
         // load tilemap assets
         this.load.image('tilesetImage','Tilemap.png')
@@ -17,10 +20,13 @@ class Load extends Phaser.Scene {
 
         // load sfx
         this.load.audio('jump', 'sfx/jump.wav');
+
+
     }
 
     create() {
         this.createHeroAnims();
+        this.createEnemyAnims();
 
         // start playScene after loading everything
         this.scene.start('menuScene');
@@ -103,7 +109,45 @@ class Load extends Phaser.Scene {
 
     }
 
+    createEnemyAnims(){
+        
+        // Idle animation
+        this.anims.create({
+            key: 'enemy-idle',
+            frames: [{
+                key: 'enemy',
+                frame: 'Slime 0.aseprite'
+            }]
+        });
 
+        // Walk animation
+        this.anims.create({
+            key: 'enemy-walk',
+            frameRate: 10,
+            repeat: -1,
+            frames: this.anims.generateFrameNames('enemy', {
+                start: 0, 
+                end: 1,
+                prefix: 'Slime ',
+                suffix: '.aseprite'
+            })
+        });
+
+        // Damaged animation
+        this.anims.create({
+            key: 'enemy-damaged',
+            frameRate: 10,
+            repeat: 0,
+            frames: this.anims.generateFrameNames('enemy', {
+                start: 2, 
+                end: 2,
+                prefix: 'Slime ',
+                suffix: '.aseprite'
+            })
+        });
+
+
+    }
     
 
 }
