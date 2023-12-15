@@ -149,7 +149,6 @@ class Play extends Phaser.Scene {
         // OBJECTIVES ------------------------------------------------------------
 
             // Spawn crystal
-        // this.crystal = this.physics.add.sprite(53, 138, 'crystal').setScale(0.9);
         this.crystal = this.physics.add.sprite(1584, 209, 'crystal').setScale(0.9);
         this.crystal.body.setImmovable(true);
         this.crystal.body.setSize(this.crystal.width/2);
@@ -161,6 +160,7 @@ class Play extends Phaser.Scene {
                 this.pickupCrystalSound.play();
                 this.crystalGrabbed = true;
                 this.crystal.destroy();
+                this.crystal = null;
             }
         });
 
@@ -251,6 +251,11 @@ class Play extends Phaser.Scene {
                 // God mode
         if (Phaser.Input.Keyboard.JustDown(this.keyU)) {
             this.godMode = !this.godMode;
+            if (this.godMode) {
+                this.player.setScale(1.3); // Increase the size of the player
+            } else {
+                this.player.setScale(1); // Reset the size of the player
+            }
         }
 
         // PLAYER ----------------------------------------------------------------
@@ -288,7 +293,14 @@ class Play extends Phaser.Scene {
 
         // ENEMY -----------------------------------------------------------------
 
+        // OBJECTIVES ------------------------------------------------------------
 
+            // Crystal Animations
+        if(this.crystal){
+            this.crystal.anims.play('crystal-idle', true);
+        }
+
+        // OBJECTIVES ------------------------------------------------------------
 
 
     }
@@ -300,12 +312,12 @@ class Play extends Phaser.Scene {
         cannonBall.body.setVelocityX(20);
         cannonBall.body.setCircle(cannonBall.width / 2, 1);
         cannonBall.body.setImmovable(true);
-        this.physics.add.collider(cannonBall, this.player, () => {
+        this.physics.add.overlap(cannonBall, this.player, () => {
             if (!this.godMode) {
                 // Code to handle player death
                 this.scene.start('deathScene');
             }
-        });
+        }, null, this);
     }
 
     playerDeath(){

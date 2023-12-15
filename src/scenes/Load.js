@@ -86,32 +86,6 @@ class Load extends Phaser.Scene {
             })
         });
 
-        // Slashing right
-        this.anims.create({
-            key: 'slash-right',
-            frameRate: 10,
-            repeat: 1,
-            frames: this.anims.generateFrameNames('player', {
-                start: 3, 
-                end: 4,
-                prefix: 'Hero ',
-                suffix: '.aseprite'
-            })
-        });
-
-        // Slashing left
-        this.anims.create({
-            key: 'slash-left',
-            frameRate: 10,
-            repeat: 1,
-            frames: this.anims.generateFrameNames('player', {
-                start: 8, 
-                end: 9,
-                prefix: 'Hero ',
-                suffix: '.aseprite'
-            })
-        });
-
 
 
 
