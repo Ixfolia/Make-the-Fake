@@ -81,6 +81,7 @@ class Play extends Phaser.Scene {
         // AUDIO -----------------------------------------------------------------
 
         this.jumpSound = this.sound.add('jump');
+        this.pickupCrystalSound = this.sound.add('pickupCrystal');
 
         // AUDIO -----------------------------------------------------------------
 
@@ -155,6 +156,8 @@ class Play extends Phaser.Scene {
             // Crystal Collision
         this.physics.add.collider(this.player, this.crystal, () => {
             if (this.crystalGrabbed == false){
+                    // play audio
+                this.pickupCrystalSound.play();
                 this.crystalGrabbed = true;
                 this.crystal.destroy();
             }
@@ -191,8 +194,6 @@ class Play extends Phaser.Scene {
 
         // PLAYER ----------------------------------------------------------------
 
-            // Player Properties
-        let moveDirection = new Phaser.Math.Vector2(0, 0);  
 
             // Player Movement
 
@@ -221,7 +222,8 @@ class Play extends Phaser.Scene {
         }
         if (Phaser.Input.Keyboard.JustDown(this.keyW) && this.player.body.onFloor()){
             this.jumpSound.play();
-            this.player.body.setVelocityY(-200);
+            this.jumpSound.setVolume(0.5);
+            this.player.body.setVelocityY(-210);
         }
 
         if (!this.player.body.onFloor()){

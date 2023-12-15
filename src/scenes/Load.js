@@ -26,6 +26,7 @@ class Load extends Phaser.Scene {
 
         // load sfx
         this.load.audio('jump', 'sfx/jump.wav');
+        this.load.audio('pickupCrystal', 'sfx/pickupCrystal.wav');
 
 
     }

@@ -11,7 +11,7 @@ class Controls extends Phaser.Scene{
         controls1.setFontSize(40);
 
         let controls2 = this.add.text(game.config.width / 2, game.config.height / 2 + 100, 
-        'A and D to move left and right\nW to jump\nPress R to restart\nIf the game is too hard, use arrow keys for super jump, speed and noclip (buggy)\nPress N to go back to menu'
+        'A and D to move left and right\nW to jump\nPress R to restart\nUse arrow keys for super jump, speed, noclip if too hard \n(buggy, use alongside regular controls)\nPress N to go back to menu'
         ).setOrigin(0.5);
         controls2.setFontSize(32);
 
